@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+{% block content %}
+	<!-- div class="content-section" -->
+    <div class="container-section-query-list">
+		<form id='userid' method="POST" action="">
+			{{ form.hidden_tag() }}
+			<fieldset class="form-group">
+				<legend class="border-bottom mb-4">Spell Checker Activity History</legend>
+                <p id="numsessions">Sessions Count : {{ activity_records_cnt }}</p>
+                    <div id=history>
+                        <table class="table table-hover">
+                          <thead>
+                            <tr>
+                              <th scope="col">Activity ID</th>
+                              <th scope="col">User Name</th>
+                              <th scope="col">Login Time</th>
+                              <th scope="col">Logout Time</th>
+                            </tr>
+                          </thead>
+                        {% if (activity_records_cnt > 0) %}
+                          <tbody>
+                          {# <ul style="list-style-type:none;"> #}
+                            {% for ar in activity_records %}
+                            <tr id="login{{ ar.id }}">
+                              {# <li id="login{{ ar.id }}" style="list-style-type:none;"> #}
+                              <th scope="row">{{ ar.id }}</th>
+                              <td><a href="{{ url_for('loginhistory', user_clicked=ar.username) }}">{{ ar.username }}</a></td>
+                              {# <td>{{ ar.username }}</td> #}
+                              <td id="login{{ ar.id }}_time">{{ ar.time_login }}</td>
+                              {% if ar.time_logout == None %}
+                              <td id="logout{{ ar.id }}_time">N/A</td>
+                              {% else %}
+                              <td id="logout{{ ar.id }}_time">{{ ar.time_logout }}</td>
+                              {% endif %}
+                              {# </li> #}
+                            </tr>
+                          {% endfor %}
+                          {# </ul> #}
+                          </tbody>
+                        </table>
+                    </div>
+                {% endif %}
+                {%  if current_user.username == 'admin' %}
+                    <div id=username class="form-group">
+                        {{ form.username.label(class="form-control-label") }}
+                        {% if form.username.errors %}
+                            {{ form.username(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.username.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.username(class="form-control form-control-lg") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.submit(class="btn btn-outline-info") }}
+                    </div>
+                {% endif %}
+            </fieldset>
+		</form>
+    </div>
+{% endblock content %}

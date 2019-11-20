@@ -1,0 +1,63 @@
+{% extends "layout.html" %}
+{% block content %}
+	<div class="content-section">
+		<form method="POST" action="">
+			{{ form.hidden_tag() }}
+			<fieldset class="form-group">
+				<legend class="border-bottom mb-4">Spell Checker</legend>				
+				<div id=inputtext class="form-group">
+					{{ form.input_content.label(class="form-control-label") }}
+                    {% if form.input_content.errors %}
+                        {{ form.input_content(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.input_content.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+					{% else %}
+						{{ form.input_content(class="form-control form-control-lg") }}					
+                    {% endif %}					
+					
+					{% with messages = get_flashed_messages(with_categories=true) %}
+					  {% if messages %}
+						{% for category, message in messages %}
+							<div class="alert alert-{{ category }}">
+								{{ message }}
+							</div>
+						{% endfor %}
+					  {% endif %}
+					{% endwith %}
+				</div>
+				<div id=textout class="form-group">
+					{{ form.output_content.label(class="form-control-label") }}
+					{{ form.output_content(class="form-control form-control-lg") }}
+					{% with messages = get_flashed_messages(with_categories=true) %}
+					  {% if messages %}
+						{% for category, message in messages %}
+							<div class="alert alert-{{ category }}">
+								{{ message }}
+							</div>
+						{% endfor %}
+					  {% endif %}
+					{% endwith %}
+				</div>				
+				<div id=misspelled  class="form-group">
+					{{ form.misspelled_content.label(class="form-control-label") }}
+					{{ form.misspelled_content(class="form-control form-control-lg") }}
+					{% with messages = get_flashed_messages(with_categories=true) %}
+					  {% if messages %}
+						{% for category, message in messages %}
+							<div class="alert alert-{{ category }}">
+								{{ message }}
+							</div>
+						{% endfor %}
+					  {% endif %}
+					{% endwith %}
+				</div>				
+			</fieldset>
+			<div class="form-group">
+				{{ form.submit(class="btn btn-outline-info") }}
+			</div>
+		</form>
+	</div>    
+{% endblock content %}

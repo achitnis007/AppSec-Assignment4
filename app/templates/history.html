@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+{% block content %}
+	<!-- div class="content-section" -->
+    <div class="container-section-query-list">
+		<form id='userquery' method="POST" action="">
+			{{ form.hidden_tag() }}
+			<fieldset class="form-group">
+				<legend class="border-bottom mb-4">Spell Checker Query History</legend>
+                <p id="numqueries">Query Count: {{ service_records_cnt }}</p>
+                    <div id=history>
+                        <table class="table table-hover">
+                          <thead>
+                            <tr>
+                              <th scope="col">Query ID</th>
+                              <th scope="col">User Name</th>
+                              <th scope="col">Input Content</th>
+                              <th scope="col">Date Posted</th>
+                            </tr>
+                          </thead>
+                        {% if (service_records_cnt > 0) %}
+                          <tbody>
+                          {% for sr in service_records %}
+                            <tr id="query{{ sr.id }}">
+                              <th scope="row">{{ sr.id }}</th>
+                              <td><a href="{{ url_for('history', user_clicked=sr.username) }}">{{ sr.username }}</a></td>
+                              <td><a href="{{ url_for('reviewquery', querynum='query' + sr.id|string) }}">{{ sr.input_content }}</a></td>
+                              <td>{{ sr.date_posted }}</td>
+                            </tr>
+                          {% endfor %}
+                          </tbody>
+                        </table>
+                    </div>
+                {% endif %}
+                {%  if current_user.username == 'admin' %}
+                    <div id=username class="form-group">
+                        {{ form.username.label(class="form-control-label") }}
+                        {% if form.username.errors %}
+                            {{ form.username(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.username.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.username(class="form-control form-control-lg") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        {{ form.submit(class="btn btn-outline-info") }}
+                    </div>
+                {% endif %}
+            </fieldset>
+		</form>
+    </div>
+{% endblock content %}
