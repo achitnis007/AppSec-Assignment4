@@ -84,6 +84,13 @@ celerybeat-schedule
 # Environments
 .env
 .venv
+
+# sqlite3 db file
+app/site.db
+
+# application input file used as to pass message to spellchecker binary
+app/spell_check/input.txt
+
 env/
 venv/
 ENV/

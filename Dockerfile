@@ -15,8 +15,4 @@ RUN pip3 install -r /usr/src/requirements.txt
 
 EXPOSE 8080
 
-RUN groupadd -g 1001 appuser && \
-    useradd -r -u 1001 -g appuser appuser
-USER appuser
-
 CMD ["python3", "/usr/src/app.py"]
