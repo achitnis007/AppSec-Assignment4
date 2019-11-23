@@ -31,7 +31,10 @@ Talisman(
     content_security_policy_nonce_in=['script-src']
 )
 
-app.config['SECRET_KEY'] = 'ede0f7573b2079e2c4ebbe71537ca81b'
+secretspath = "/run/secrets/"
+_ = open(secretspath+'csrf_key.txt', 'r'); csrf_key = _.read().replace('\n', ''); _.close()
+
+app.config['SECRET_KEY'] = csrf_key
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 

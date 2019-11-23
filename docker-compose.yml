@@ -1,10 +1,63 @@
-version: '3'
+version: "3.3"    
+
 services:
-  web:
+  splchk_service:
     build: .
+    image: aac664/spellchecker:latest
+    networks:
+      - net
     ports:
-      - "8080:8080"
+      - 8080:8080
     volumes:
       - .:/usr/src
-    environment:
-      FLASK_ENV: development
+    secrets:
+      - admin_password
+      - admin_2fa
+      - actester1_password
+      - actester1_2fa
+      - actester2_password
+      - actester2_2fa
+      - actester3_password
+      - actester3_2fa
+      - csrf_key
+    deploy:
+      mode: replicated
+      replicas: 4
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 20s
+        max_attempts: 3
+        window: 120s      
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 100M
+        reservations:
+          cpus: '0.25'
+          memory: 75M
+
+secrets:
+   admin_password:
+     file: admin_password.txt
+   admin_2fa:
+     file: admin_2fa.txt
+   actester1_password:
+     file: actester1_password.txt
+   actester1_2fa:
+     file: actester1_2fa.txt
+   actester2_password:
+     file: actester2_password.txt
+   actester2_2fa:
+     file: actester2_2fa.txt
+   actester3_password:
+     file: actester3_password.txt
+   actester3_2fa:
+     file: actester3_2fa.txt
+   csrf_key:
+     file: csrf_key.txt
+    
+networks:
+  net:

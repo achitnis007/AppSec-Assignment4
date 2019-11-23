@@ -8,20 +8,29 @@ db.drop_all()
 
 db.create_all()
 
-hashed_password = bcrypt.generate_password_hash('Administrator@1').decode('utf-8')
-user = User(username='admin', phone='12345678901', password=hashed_password)
+secretspath = "/run/secrets/"
+_ = open(secretspath+'admin_password.txt', 'r'); password = _.read().replace('\n', ''); _.close()
+_ = open(secretspath+'admin_2fa.txt', 'r'); phonenum = _.read().replace('\n', ''); _.close()
+hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+user = User(username='admin', phone=phonenum, password=hashed_password)
 db.session.add(user)
 
-hashed_password = bcrypt.generate_password_hash('1111111111').decode('utf-8')
-user = User(username='actester1', phone='1111111111', password=hashed_password)
+_ = open(secretspath+'actester1_password.txt', 'r'); password = _.read().replace('\n', ''); _.close()
+_ = open(secretspath+'actester1_2fa.txt', 'r'); phonenum = _.read().replace('\n', ''); _.close()
+hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+user = User(username='actester1', phone=phonenum, password=hashed_password)
 db.session.add(user)
 
-hashed_password = bcrypt.generate_password_hash('2222222222').decode('utf-8')
-user = User(username='actester2', phone='2222222222', password=hashed_password)
+_ = open(secretspath+'actester2_password.txt', 'r'); password = _.read().replace('\n', ''); _.close()
+_ = open(secretspath+'actester2_2fa.txt', 'r'); phonenum = _.read().replace('\n', ''); _.close()
+hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+user = User(username='actester2', phone=phonenum, password=hashed_password)
 db.session.add(user)
 
-hashed_password = bcrypt.generate_password_hash('3333333333').decode('utf-8')
-user = User(username='actester3', phone='3333333333', password=hashed_password)
+_ = open(secretspath+'actester3_password.txt', 'r'); password = _.read().replace('\n', ''); _.close()
+_ = open(secretspath+'actester3_2fa.txt', 'r'); phonenum = _.read().replace('\n', ''); _.close()
+hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+user = User(username='actester3', phone=phonenum, password=hashed_password)
 db.session.add(user)
 
 u1_time_now = dt.now()
