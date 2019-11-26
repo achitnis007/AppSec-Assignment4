@@ -10,6 +10,11 @@ services:
       - 8080:8080
     volumes:
       - .:/usr/src
+    environment:
+      - FLASK_APP=run.py
+      - FLASK_DEBUG=1
+      - METADATA="splchk_stack_splchk_service-sticky"
+    command: python3 /usr/src/app.py
     secrets:
       - admin_password
       - admin_2fa
@@ -20,11 +25,15 @@ services:
       - actester3_password
       - actester3_2fa
       - csrf_key
+    labels:
+      - "com.docker.lb.hosts=splchk_stack_splchk_service.local"
+      - "com.docker.lb.sticky_session_cookie=session"
+      - "com.docker.lb.port=8080"
     deploy:
       mode: replicated
-      replicas: 4
+      replicas: 2
       update_config:
-        parallelism: 2
+        parallelism: 4
         delay: 10s
       restart_policy:
         condition: on-failure

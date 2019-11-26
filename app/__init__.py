@@ -32,7 +32,7 @@ Talisman(
 )
 
 secretspath = "/run/secrets/"
-_ = open(secretspath+'csrf_key.txt', 'r'); csrf_key = _.read().replace('\n', ''); _.close()
+_ = open(secretspath+'csrf_key', 'r'); csrf_key = _.read().replace('\n', ''); _.close()
 
 app.config['SECRET_KEY'] = csrf_key
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
