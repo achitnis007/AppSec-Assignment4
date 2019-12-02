@@ -1,19 +1,17 @@
-version: "3.3"    
+version: "3.3"
 
 services:
   splchk_service:
     build: .
     image: aac664/spellchecker:latest
     networks:
-      - net
+      - splchk_net
     ports:
       - 8080:8080
     volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
       - .:/usr/src
-    environment:
-      - FLASK_APP=run.py
-      - FLASK_DEBUG=1
-      - METADATA="splchk_stack_splchk_service-sticky"
     command: python3 /usr/src/app.py
     secrets:
       - admin_password
@@ -25,21 +23,20 @@ services:
       - actester3_password
       - actester3_2fa
       - csrf_key
-    labels:
-      - "com.docker.lb.hosts=splchk_stack_splchk_service.local"
-      - "com.docker.lb.sticky_session_cookie=session"
-      - "com.docker.lb.port=8080"
     deploy:
       mode: replicated
       replicas: 2
       update_config:
-        parallelism: 4
-        delay: 10s
+        delay: 5s
       restart_policy:
         condition: on-failure
         delay: 20s
         max_attempts: 3
         window: 120s      
+      labels:
+        - "com.docker.lb.hosts=splchk_net.local"
+        - "com.docker.lb.sticky_session_cookie=session"
+        - "com.docker.lb.port=8080"
       resources:
         limits:
           cpus: '0.5'
@@ -69,4 +66,4 @@ secrets:
      file: csrf_key.txt
     
 networks:
-  net:
+  splchk_net:
